@@ -25,7 +25,6 @@ class TodoTab extends StatelessWidget {
     return "${d.day.toString().padLeft(2, '0')}/${d.month.toString().padLeft(2, '0')}/${d.year} - ${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}";
   }
 
-
   void _showAddDialog(BuildContext context) {
     final TextEditingController _taskController = TextEditingController();
     DateTime selectedDate = DateTime.now();
@@ -117,12 +116,24 @@ class TodoTab extends StatelessWidget {
                 return Card(
                   elevation: 0.5,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                  child: ListTile(
+                  child: GestureDetector(
+                    // FIX: Thêm behavior để nhận diện chạm trên điện thoại tốt hơn
+                    behavior: HitTestBehavior.opaque, 
                     onTap: () => onEdit(t), 
-                    leading: Checkbox(value: t.done, activeColor: myPurple, onChanged: (v) => onToggle(t, v)),
-                    title: Text(t.title, style: TextStyle(decoration: t.done ? TextDecoration.lineThrough : null, fontWeight: FontWeight.bold)),
-                    subtitle: Text(formatDateTime(t.time)),
-                    trailing: IconButton(icon: const Icon(Icons.delete_outline, color: Colors.redAccent), onPressed: () => onDelete(t)),
+                    child: ListTile(
+                      // Tách Checkbox ra để không bị dính vào sự kiện onTap của cả hàng
+                      leading: Checkbox(
+                        value: t.done, 
+                        activeColor: myPurple, 
+                        onChanged: (v) => onToggle(t, v)
+                      ),
+                      title: Text(t.title, style: TextStyle(decoration: t.done ? TextDecoration.lineThrough : null, fontWeight: FontWeight.bold)),
+                      subtitle: Text(formatDateTime(t.time)),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete_outline, color: Colors.redAccent), 
+                        onPressed: () => onDelete(t)
+                      ),
+                    ),
                   ),
                 );
               },
