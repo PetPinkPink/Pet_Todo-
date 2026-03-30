@@ -23,31 +23,74 @@ class _HomePageState extends State<HomePage> {
     return "Chào buổi tối 🌙";
   }
 
+  void _showEmilyProfile(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const EmilyProfilePage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
     final Color uniformBg = Theme.of(context).scaffoldBackgroundColor;
 
-    Widget welcomeScreen = Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.pets, size: 100, color: myPurple),
-          const SizedBox(height: 25),
-          Text(getGreeting(), style: const TextStyle(fontSize: 20, color: Colors.grey)),
-          const SizedBox(height: 10),
-          Text(
-            widget.username,
-            style: const TextStyle(
-              fontSize: 32, 
-              fontWeight: FontWeight.bold, 
-              color: myPurple,
-              letterSpacing: 1.1
-            ),
+    Widget welcomeScreen = Column(
+      children: [
+     
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("Xin chào,", style: TextStyle(color: Colors.grey, fontSize: 14)),
+                  const Text(
+                    "Emily", 
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              GestureDetector(
+                onTap: () => _showEmilyProfile(context),
+                child: Container(
+                  padding: const EdgeInsets.all(2),
+                  decoration: const BoxDecoration(color: myPurple, shape: BoxShape.circle),
+                  child: const CircleAvatar(
+                    radius: 22,
+                    backgroundColor: Colors.white,
+                    backgroundImage: AssetImage('images/logo.png'), 
+                  ),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 40),
-        ],
-      ),
+        ),
+        
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.pets, size: 100, color: myPurple),
+              const SizedBox(height: 25),
+              Text(getGreeting(), style: const TextStyle(fontSize: 20, color: Colors.grey)),
+              const SizedBox(height: 10),
+              Text(
+                widget.username, 
+                style: const TextStyle(
+                  fontSize: 32, 
+                  fontWeight: FontWeight.bold, 
+                  color: myPurple,
+                  letterSpacing: 1.1
+                ),
+              ),
+              const SizedBox(height: 60), 
+            ],
+          ),
+        ),
+      ],
     );
 
     return Scaffold(
@@ -101,8 +144,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const SizedBox(height: 10),
-              
-   
               ListTile(
                 leading: Icon(
                   Icons.apps, 
@@ -111,7 +152,6 @@ class _HomePageState extends State<HomePage> {
                 title: Text(
                   "App", 
                   style: TextStyle(
-                   
                     color: _currentDrawerIndex == 0 
                         ? myPurple 
                         : (isDark ? Colors.white : Colors.black87),
@@ -124,7 +164,6 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pop(context);
                 },
               ),
-         
               ListTile(
                 leading: Icon(
                   Icons.person_outline, 
@@ -133,7 +172,6 @@ class _HomePageState extends State<HomePage> {
                 title: Text(
                   "Tác giả", 
                   style: TextStyle(
-                  
                     color: _currentDrawerIndex == 1 
                         ? myPurple 
                         : (isDark ? Colors.white : Colors.black87),
@@ -146,7 +184,6 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pop(context);
                 },
               ),
-              
               const Spacer(),
               const Divider(),
               ListTile(
@@ -159,7 +196,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-     
       body: _currentDrawerIndex == -1 
           ? welcomeScreen 
           : IndexedStack(
@@ -169,6 +205,70 @@ class _HomePageState extends State<HomePage> {
                 const AuthorPage(),
               ],
             ),
+    );
+  }
+}
+
+class EmilyProfilePage extends StatelessWidget {
+  const EmilyProfilePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    const Color emilyPurple = Color.fromARGB(255, 195, 88, 234);
+    
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Emily\'s Profile'),
+        backgroundColor: emilyPurple,
+        foregroundColor: Colors.white,
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+            const CircleAvatar(
+              radius: 70,
+              backgroundColor: emilyPurple,
+              child: CircleAvatar(
+                radius: 66,
+                backgroundColor: Colors.white,
+                backgroundImage: AssetImage('images/logo.png'), 
+              ),
+            ),
+            const SizedBox(height: 25),
+            const Text(
+              'Emily Smith',
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: emilyPurple),
+            ),
+            
+            
+            const SizedBox(height: 30),
+            
+            _buildProfileInfo(Icons.email_outlined, 'Email', 'emily.smith@example.com'),
+            _buildProfileInfo(Icons.phone_android_outlined, 'Số điện thoại', '0 123 456 789'),
+            _buildProfileInfo(Icons.cake_outlined, 'Ngày sinh', '19 tháng 11'),
+            _buildProfileInfo(Icons.pets_outlined, 'Mục tiêu', 'Sống kỷ luật hơn, cố gắng hơn ngày hôm qua'),
+            
+            const SizedBox(height: 30),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileInfo(IconData icon, String title, String value) {
+    const Color emilyPurple = Color.fromARGB(255, 195, 88, 234);
+    
+    return Column(
+      children: [
+        ListTile(
+          leading: Icon(icon, color: emilyPurple),
+          title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: Text(value, style: const TextStyle(fontSize: 16)),
+        ),
+        const Divider(height: 1, indent: 70, endIndent: 20),
+      ],
     );
   }
 }
